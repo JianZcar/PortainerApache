@@ -84,8 +84,6 @@ else
 		-v "$XDG_RUNTIME_DIR:/run/user/$(id -u)" \
 		-e WAYLAND_DISPLAY=wayland-0 \
 		-e XDG_RUNTIME_DIR=/run/user/$(id -u) \
-		-v /dev/shm:/dev/shm \
-		-v /tmp:/tmp \
 		-v "$HOME/.config/helix:/root/.config/helix:z" \
 		--device /dev/dri \
 		--security-opt label=type:container_runtime_t \
