@@ -1,34 +1,37 @@
-# Use the latest Fedora image
-FROM fedora:latest
+# Use the latest Ubuntu image
+FROM ubuntu:latest
 
-# Install Apache and PHP-FPM
-RUN dnf -y update && \
-    dnf -y install httpd php-fpm php-cli php-pdo php-mysqlnd && \
-    dnf clean all
+# Set the environment variable for the PHP version, default to 8.2
+ARG PHP_VERSION=8.2
+ENV PHP_VERSION=${PHP_VERSION}
 
-# Create the directory for the PHP-FPM PID file
-RUN mkdir -p /run/php-fpm && chown apache:apache /run/php-fpm
+# Install required dependencies and PHP versions
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:ondrej/php && \
+    apt-get update && \
+    apt-get install -y apache2 php8.0 php8.0-fpm libapache2-mod-php8.0 php8.0-mysql \
+                        php8.1 php8.1-fpm libapache2-mod-php8.1 php8.1-mysql \
+                        php8.2 php8.2-fpm libapache2-mod-php8.2 php8.2-mysql \
+                        php8.3 php8.3-fpm libapache2-mod-php8.3 php8.3-mysql \
+                        php8.4 php8.4-fpm libapache2-mod-php8.4 php8.4-mysql && \
+    apt-get clean
 
-# Set ServerName to localhost
-RUN echo "ServerName localhost" >> /etc/httpd/conf/httpd.conf
+# Enable required Apache modules
+RUN a2enmod proxy_fcgi setenvif
 
-# Configure Apache to use PHP-FPM
-COPY php-fpm.conf /etc/httpd/conf.d/php-fpm.conf
+# Set ServerName to suppress the warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Set DirectoryIndex to include index.php
-RUN echo "DirectoryIndex index.php index.html" >> /etc/httpd/conf/httpd.conf
+# Copy the start script to the container
+COPY start-apache.sh /usr/local/bin/start-apache.sh
+RUN chmod +x /usr/local/bin/start-apache.sh
 
-# Ensure /var/www/html exists and set permissions
-RUN mkdir -p /var/www/html && chown -R apache:apache /var/www/html
+# Set the working directory
+WORKDIR /var/www/html
 
-# Copy the entrypoint script
-COPY entrypoint.sh /usr/local/bin/
-
-# Make the entrypoint script executable
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-# Expose port 80
+# Expose port 80 for Apache
 EXPOSE 80
 
-# Use the entrypoint script
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# Set the entrypoint to the start script
+ENTRYPOINT ["/usr/local/bin/start-apache.sh"]
