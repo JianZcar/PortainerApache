@@ -3,7 +3,7 @@ FROM fedora:latest
 
 # Install Apache and PHP-FPM
 RUN dnf -y update && \
-    dnf -y install httpd php-fpm php-cli && \
+    dnf -y install httpd php-fpm php-cli php-pdo php-mysqlnd && \
     dnf clean all
 
 # Create the directory for the PHP-FPM PID file
