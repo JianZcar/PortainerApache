@@ -7,7 +7,7 @@ ENV PHP_VERSION=${PHP_VERSION}
 
 # Install required dependencies and PHP versions
 RUN apt-get update && \
-    apt-get install -y software-properties-common && \
+    apt-get install -y software-properties-common curl && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get install -y apache2 php8.0 php8.0-fpm libapache2-mod-php8.0 php8.0-mysql \
@@ -16,12 +16,29 @@ RUN apt-get update && \
                         php8.3 php8.3-fpm libapache2-mod-php8.3 php8.3-mysql \
                         php8.4 php8.4-fpm libapache2-mod-php8.4 php8.4-mysql && \
     apt-get clean
+    
+RUN apt-get update && \
+		apt-get install -y wl-clipboard libwayland-dev && \
+		apt-get clean
 
 # Enable required Apache modules
 RUN a2enmod proxy_fcgi setenvif
 
 # Set ServerName to suppress the warning
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Install Node.js and npm
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean
+
+# Install Intelephense globally using npm
+RUN npm install -g intelephense typescript-language-server typescript vscode-langservers-extracted npm
+
+RUN add-apt-repository ppa:maveonair/helix-editor && \
+		apt-get update && \
+		apt-get install -y helix && \
+		apt-get clean
 
 # Copy the start script to the container
 COPY start-apache.sh /usr/local/bin/start-apache.sh
@@ -32,6 +49,13 @@ WORKDIR /var/www/html
 
 # Expose port 80 for Apache
 EXPOSE 80
+
+ENV TERM="xterm-256color" \
+    COLORTERM="truecolor"
+
+# Enable true color support
+RUN echo "export PS1='\[\033[38;5;39m\]\u@\h \[\033[38;5;208m\]\w\[\033[0m\] $ '" >> /root/.bashrc \
+    && echo "alias ls='ls --color=auto'" >> /root/.bashrc 
 
 # Set the entrypoint to the start script
 ENTRYPOINT ["/usr/local/bin/start-apache.sh"]
