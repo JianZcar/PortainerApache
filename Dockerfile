@@ -10,11 +10,11 @@ RUN apt-get update && \
     apt-get install -y software-properties-common curl && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
-    apt-get install -y apache2 php8.0 php8.0-fpm libapache2-mod-php8.0 php8.0-mysql \
-                        php8.1 php8.1-fpm libapache2-mod-php8.1 php8.1-mysql \
-                        php8.2 php8.2-fpm libapache2-mod-php8.2 php8.2-mysql \
-                        php8.3 php8.3-fpm libapache2-mod-php8.3 php8.3-mysql \
-                        php8.4 php8.4-fpm libapache2-mod-php8.4 php8.4-mysql && \
+    apt-get install -y apache2 php8.0 php8.0-fpm libapache2-mod-php8.0 php8.0-mysql php8.0-mbstring \
+                        php8.1 php8.1-fpm libapache2-mod-php8.1 php8.1-mysql php8.1-mbstring \
+                        php8.2 php8.2-fpm libapache2-mod-php8.2 php8.2-mysql php8.2-mbstring \
+                        php8.3 php8.3-fpm libapache2-mod-php8.3 php8.3-mysql php8.3-mbstring \
+                        php8.4 php8.4-fpm libapache2-mod-php8.4 php8.4-mysql php8.4-mbstring && \
     apt-get clean
     
 RUN apt-get update && \
@@ -34,6 +34,14 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
 
 # Install Intelephense globally using npm
 RUN npm install -g intelephense typescript-language-server typescript vscode-langservers-extracted npm
+
+RUN curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
+    | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
+echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
+    | tee /etc/apt/sources.list.d/ngrok.list >/dev/null && \
+		apt update && \
+		apt install ngrok && \
+    apt-get clean
 
 RUN add-apt-repository ppa:maveonair/helix-editor && \
 		apt-get update && \
