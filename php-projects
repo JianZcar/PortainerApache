@@ -35,8 +35,7 @@ else
 	  # Validate the selected PHP version
 	  if [[ "$PHP_VERSION" =~ ^8\.(0|1|2|3|4)$ ]]; then
 	      echo -e "\033[32mPHP Version:\033[0m $PHP_VERSION"
-	      echo "python-version: \"$PHP_VERSION\"" > "$ABS_PATH/$CONFIG_FILE"
-	      echo -e "\033[34mGenerated configuration file:\033[0m $ABS_PATH/$CONFIG_FILE"
+	      echo "php-version: \"$PHP_VERSION\"" > "$ABS_PATH/$CONFIG_FILE"
 	  else
 	      echo -e "\033[31mInvalid PHP version.\033[0m"
 	      exit 1
