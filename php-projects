@@ -59,4 +59,5 @@ else
 		--rm \
 		-ti php-fpm-apache 
 fi
+test
 
