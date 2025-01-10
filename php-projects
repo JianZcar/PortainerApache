@@ -59,9 +59,3 @@ else
 		--rm \
 		-ti php-fpm-apache 
 fi
-<<<<<<< HEAD
-test
-||||||| cf5513c
-=======
-tttttt
->>>>>>> 80b31ac87d72a66bccdbcf
