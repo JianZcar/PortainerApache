@@ -40,22 +40,29 @@ else
 	      exit 1
 	  fi
 
-	# Construct and run the podman command
-	podman run \
-		-e PHP_VERSION=$PHP_VERSION \
-		-p 8080:80 \
-		--name "$CONTAINER_NAME" \
-		--network container-network \
-		--privileged \
-		$PORT_OPTIONS \
-		-v "$ABS_PATH:/var/www/html:z" \
-		-v "$XDG_RUNTIME_DIR/wayland-0:/tmp/wayland-0" \
-		-v "$XDG_RUNTIME_DIR:/run/user/$(id -u)" \
-		-e WAYLAND_DISPLAY=wayland-0 \
-		-e XDG_RUNTIME_DIR=/run/user/$(id -u) \
-		-v "$HOME/.config/helix:/root/.config/helix:z" \
-		--device /dev/dri \
-		--security-opt label=type:container_runtime_t \
-		--rm \
-		-ti php-fpm-apache 
+    PORT=8080
+    while podman ps -a --format "{{.Ports}}" | grep -q "0.0.0.0:${PORT}->"; do
+        ((PORT++))
+    done
+
+    echo -e "\033[32mUsing port:\033[0m $PORT"
+
+    # Construct and run the podman command
+    podman run \
+        -e PHP_VERSION=$PHP_VERSION \
+        -p "$PORT:80" \
+        --name "$CONTAINER_NAME" \
+        --network container-network \
+        --privileged \
+        $PORT_OPTIONS \
+        -v "$ABS_PATH:/var/www/html:z" \
+        -v "$XDG_RUNTIME_DIR/wayland-0:/tmp/wayland-0" \
+        -v "$XDG_RUNTIME_DIR:/run/user/$(id -u)" \
+        -e WAYLAND_DISPLAY=wayland-0 \
+        -e XDG_RUNTIME_DIR=/run/user/$(id -u) \
+        -v "$HOME/.config/helix:/root/.config/helix:z" \
+        --device /dev/dri \
+        --security-opt label=type:container_runtime_t \
+        --rm \
+        -ti php-fpm-apache 
 fi
