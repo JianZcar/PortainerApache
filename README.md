@@ -67,7 +67,3 @@ Contributions are welcome! Please fork the repository and create a pull request 
 Special thanks to the open-source community for providing the tools and libraries used in this project.
 
 For any issues or questions, please open an issue on the [GitHub repository](https://github.com/JianZcar/PortainerApache/issues).
-
----
-
-Feel free to customize the README further based on your specific needs and project details.
