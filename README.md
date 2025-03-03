@@ -10,7 +10,6 @@ This project provides a containerized Apache environment with support for multip
 - **Neovim Integration**: Uses the user's Neovim configuration by mounting the `.config/nvim` and `.local/share/nvim` directories from the host to the container.
 - **Multiple PHP Versions**: Supports PHP versions 8.0 to 8.4.
 - **Node.js and npm**: Includes Node.js and npm, along with additional tools like ngrok.
-- **Enhanced Terminal Experience**: Sets up a colorized bash prompt and useful aliases.
 - **Auto Port Assigning**: Automatically assigns an available port for the container to avoid conflicts.
 
 ## Prerequisites
