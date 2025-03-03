@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Default directory to scan (change to your default directory if needed)
+SCAN_DIR="$HOME/Dev/Projects/Portainer-Apache"
+
+# Check if the folder exists
+if [ ! -d "$SCAN_DIR" ]; then
+    echo -e "\033[31mError:\033[0m Directory '$SCAN_DIR' does not exist."
+    exit 1
+fi
+
+# Inform the user about the scanning process
+echo -e "\033[34mScanning directory:\033[0m $SCAN_DIR"
+
+# Use fzf to list only folder names with a tree view preview
+SELECTED_NAME=$(find "$SCAN_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzf --preview "tree -C '$SCAN_DIR/{}'" --height=40% --border --ansi)
+
+# Check if a folder was selected
+if [ -n "$SELECTED_NAME" ]; then
+    ABS_PATH="$SCAN_DIR/$SELECTED_NAME"
+    echo -e "\033[32mSelected folder:\033[0m $ABS_PATH"
+else
+    echo -e "\033[33mNo folder selected.\033[0m"
+    exit 1
+fi
+
+CONTAINER_NAME=$(basename "$ABS_PATH")
+
+# Check if the container exists
+if podman container inspect "$CONTAINER_NAME" &> /dev/null; then
+    podman exec -it "$CONTAINER_NAME" bash
+else
+	  PHP_VERSION=$(printf "8.0\n8.1\n8.2\n8.3\n8.4" | fzf --height=10% --border --ansi --prompt="Select PHP version: ")
+
+	  # Validate the selected PHP version
+	  if [[ "$PHP_VERSION" =~ ^8\.(0|1|2|3|4)$ ]]; then
+	      echo -e "\033[32mPHP Version:\033[0m $PHP_VERSION"
+	  else
+	      echo -e "\033[31mInvalid PHP version.\033[0m"
+	      exit 1
+	  fi
+
+    PORT=8080
+    while podman ps -a --format "{{.Ports}}" | grep -q "0.0.0.0:${PORT}->"; do
+        ((PORT++))
+    done
+
+    echo -e "\033[32mUsing port:\033[0m $PORT"
+
+    # Construct and run the podman command
+    podman run \
+        -e PHP_VERSION=$PHP_VERSION \
+        -p "$PORT:80" \
+        --name "$CONTAINER_NAME" \
+        --network container-network \
+        --privileged \
+        $PORT_OPTIONS \
+        -v "$ABS_PATH:/var/www/html:z" \
+        -v "$XDG_RUNTIME_DIR/wayland-0:/tmp/wayland-0" \
+        -v "$XDG_RUNTIME_DIR:/run/user/$(id -u)" \
+        -e WAYLAND_DISPLAY=wayland-0 \
+        -e XDG_RUNTIME_DIR=/run/user/$(id -u) \
+        -v "$HOME/.config/helix:/root/.config/helix:z" \
+        --device /dev/dri \
+        --security-opt label=type:container_runtime_t \
+        --rm \
+        -ti apache-php
+fi
