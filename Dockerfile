@@ -33,7 +33,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get clean
 
 # Install Intelephense globally using npm
-RUN npm install -g intelephense typescript-language-server typescript vscode-langservers-extracted npm
+RUN npm install -g intelephense typescript-language-server typescript vscode-langservers-extracted @tailwindcss/language-server npm
 
 RUN curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
     | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
@@ -43,10 +43,9 @@ echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
 		apt install ngrok && \
     apt-get clean
 
-RUN add-apt-repository ppa:maveonair/helix-editor && \
-		apt-get update && \
-		apt-get install -y helix && \
-		apt-get clean
+RUN apt-get update && \
+		apt-get install -y nvim && \
+    apt-get clean
 
 # Copy the start script to the container
 COPY start-apache.sh /usr/local/bin/start-apache.sh
