@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default directory to scan (change to your default directory if needed)
-SCAN_DIR="$HOME/Dev/Projects/PHP"
+SCAN_DIR="$HOME/Dev/Projects/Portainer-Apache"
 
 # Check if the folder exists
 if [ ! -d "$SCAN_DIR" ]; then
@@ -64,5 +64,5 @@ else
         --device /dev/dri \
         --security-opt label=type:container_runtime_t \
         --rm \
-        -ti php-fpm-apache 
+        -ti apache-php
 fi
