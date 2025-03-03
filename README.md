@@ -2,6 +2,17 @@
 
 This project provides a containerized Apache environment with support for multiple PHP versions. It utilizes Podman for container management and fzf for interactive folder selection. The primary goal is to quickly set up and manage PHP projects in isolated containers with Apache.
 
+## Features
+
+- **Containerized Apache Environment**: Provides a fully containerized Apache environment with support for multiple PHP versions.
+- **Podman for Container Management**: Utilizes Podman for efficient container management.
+- **fzf for Folder Selection**: Employs fzf for interactive folder selection.
+- **Neovim Integration**: Uses the user's Neovim configuration by mounting the `.config/nvim` and `.local/share/nvim` directories from the host to the container.
+- **Multiple PHP Versions**: Supports PHP versions 8.0 to 8.4.
+- **Node.js and npm**: Includes Node.js and npm, along with additional tools like ngrok.
+- **Enhanced Terminal Experience**: Sets up a colorized bash prompt and useful aliases.
+- **Auto Port Assigning**: Automatically assigns an available port for the container to avoid conflicts.
+
 ## Prerequisites
 
 - **Podman**: Ensure you have Podman installed on your system.
@@ -32,6 +43,10 @@ This project provides a containerized Apache environment with support for multip
 2. Follow the prompts to select the PHP version and the folder to be used in the container.
 
 3. The script will handle container creation, starting Apache, and providing an interactive bash shell.
+
+### Neovim Configuration
+
+- The container will use the user's Neovim configuration by mounting the `.config/nvim` and `.local/share/nvim` directories from the host to the container.
 
 ### Apache Configuration
 
