@@ -64,5 +64,5 @@ else
         --device /dev/dri \
         --security-opt label=type:container_runtime_t \
         --rm \
-        -ti apache-php
+        -ti portainer-apache
 fi
