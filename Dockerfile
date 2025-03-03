@@ -44,11 +44,11 @@ echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
     apt-get clean
 
 RUN apt-get update && \
-		apt-get install -y nvim && \
+		apt-get install -y neovim && \
     apt-get clean
 
 # Copy the start script to the container
-COPY start-apache.sh /usr/local/bin/start-apache.sh
+COPY bin/start-apache.sh /usr/local/bin/start-apache.sh
 RUN chmod +x /usr/local/bin/start-apache.sh
 
 # Set the working directory
