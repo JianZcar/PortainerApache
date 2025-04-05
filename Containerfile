@@ -44,8 +44,14 @@ echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
     apt-get clean
 
 RUN apt-get update && \
-		apt-get install -y neovim && \
+    apt-get install -y git && \
     apt-get clean
+
+RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz && \
+		rm -rf /opt/nvim && \
+		tar -C /opt -xzf nvim-linux-x86_64.tar.gz && \
+		echo 'export PATH="$PATH:/opt/nvim-linux-x86_64/bin"' >> /root/.bashrc
+		
 
 # Copy the start script to the container
 COPY bin/start-apache.sh /usr/local/bin/start-apache.sh
@@ -61,8 +67,9 @@ ENV TERM="xterm-256color" \
     COLORTERM="truecolor"
 
 # Enable true color support
-RUN echo "export PS1='\[\033[38;5;39m\]\u@\h \[\033[38;5;208m\]\w\[\033[0m\] $ '" >> /root/.bashrc \
-    && echo "alias ls='ls --color=auto'" >> /root/.bashrc 
+RUN echo "export PS1='\[\033[38;5;39m\]\u@\h \[\033[38;5;208m\]\w\[\033[0m\] $ '" >> /root/.bashrc && \ 
+		echo "alias ls='ls --color=auto'" >> /root/.bashrc 
+    
 
 # Set the entrypoint to the start script
 ENTRYPOINT ["/usr/local/bin/start-apache.sh"]
