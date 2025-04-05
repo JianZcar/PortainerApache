@@ -4,6 +4,7 @@ FROM ubuntu:latest
 # Set the environment variable for the PHP version, default to 8.2
 ARG PHP_VERSION=8.2
 ENV PHP_VERSION=${PHP_VERSION}
+#test
 
 # Install required dependencies and PHP versions
 RUN apt-get update && \
