@@ -65,7 +65,6 @@ else
         -e PHP_VERSION=$PHP_VERSION \
         -p "$PORT:80" \
         --name "$CONTAINER_NAME" \
-        --network container-network \
         --privileged \
         $PORT_OPTIONS \
         -v "$ABS_PATH:/var/www/html:z" \
