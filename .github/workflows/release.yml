@@ -16,7 +16,7 @@ jobs:
           ref: main 
 
       - name: Create Package
-        run: tar -czf fuzpad-${{ github.ref_name }}.tar.gz --exclude LICENSE --exclude README.md --exclude CODE_OF_CONDUCT.md --exclude CONTRIBUTING.md --exclude Containerfile --exclude bin/start-apache.sh *
+        run: tar -czf portainerapache.tar.gz --exclude LICENSE --exclude README.md --exclude CODE_OF_CONDUCT.md --exclude CONTRIBUTING.md --exclude Containerfile --exclude bin/start-apache.sh *
 
       - name: Generate Changelog
         id: changelog
