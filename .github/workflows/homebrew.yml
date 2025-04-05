@@ -44,7 +44,7 @@ jobs:
             depends_on "fzf"
 
             def install
-              bin.install "portainer-apache"
+              bin.install "bin/portainer-apache"
             end
           end
           EOF
