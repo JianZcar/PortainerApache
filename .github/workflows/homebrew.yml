@@ -71,6 +71,6 @@ jobs:
           cd homebrew-packages 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add Formula/aortainerapache.rb
+          git add Formula/portainerapache.rb
           git commit -m "(PortainerApache Update) Update Homebrew formula for PortainerApache version ${{ env.LATEST_TAG }}"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/JianZcar/homebrew-packages.git HEAD:main
