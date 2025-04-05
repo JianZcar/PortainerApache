@@ -30,7 +30,7 @@ jobs:
         if: steps.changelog.outcome == 'success'
         with:
           body_path: CHANGELOG.md
-          files: fuzpad-${{ github.ref_name }}.tar.gz
+          files: portainerapache.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
  
