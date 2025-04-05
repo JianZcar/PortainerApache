@@ -28,7 +28,7 @@ jobs:
           SHA256=$(curl -sL https://github.com/JianZcar/PortainerApache/releases/download/${{ env.LATEST_TAG }}/portainerapache.tar.gz | sha256sum | awk '{print $1}')
           
           cat > portainerapache.rb <<EOF
-          class PortainerApache < Formula
+          class Portainerapache < Formula
             desc "Containerized Apache with multi-PHP support using Podman and fzf."
             homepage "https://github.com/JianZcar/PortainerApache"
             url "https://github.com/JianZcar/PortainerApache/releases/download/${{ env.LATEST_TAG }}/portainerapache.tar.gz"
